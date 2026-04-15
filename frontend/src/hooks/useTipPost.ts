@@ -161,7 +161,6 @@ export function useTipPost() {
     [contract, checkNetwork, getContract, showToast, fetchAllPosts, fetchEarnings]
   );
 
-  // Like post
   const likePost = useCallback(
     async (postId: bigint) => {
       try {
@@ -199,7 +198,6 @@ export function useTipPost() {
     [contract, checkNetwork, getContract, showToast, fetchAllPosts, fetchEarnings]
   );
 
-  // Check if user liked a post
   const checkLiked = useCallback(
     async (postId: bigint): Promise<boolean> => {
       if (!account) return false;
@@ -215,27 +213,37 @@ export function useTipPost() {
 
   // Event listeners
   useEffect(() => {
-    if (!contract) return;
+    let providerContract: ethers.Contract | null = null;
 
-    const onPostCreated = () => {
-      fetchAllPosts();
-      fetchEarnings();
-    };
-    const onPostLiked = () => {
-      fetchAllPosts();
-      fetchEarnings();
+    const setupListeners = async () => {
+      if (!window.ethereum) return;
+      try {
+        providerContract = await getContract(false);
+        
+        providerContract.on("PostCreated", () => {
+          fetchAllPosts();
+          fetchEarnings();
+        });
+        
+        providerContract.on("PostLiked", () => {
+          fetchAllPosts();
+          fetchEarnings();
+        });
+      } catch (err) {
+        console.error("Failed to setup listeners", err);
+      }
     };
 
-    contract.on("PostCreated", onPostCreated);
-    contract.on("PostLiked", onPostLiked);
+    setupListeners();
 
     return () => {
-      contract.off("PostCreated", onPostCreated);
-      contract.off("PostLiked", onPostLiked);
+      if (providerContract) {
+        providerContract.removeAllListeners("PostCreated");
+        providerContract.removeAllListeners("PostLiked");
+      }
     };
-  }, [contract, fetchAllPosts, fetchEarnings]);
+  }, [getContract, fetchAllPosts, fetchEarnings]);
 
-  // Account change listener
   useEffect(() => {
     if (!window.ethereum) return;
 
@@ -263,7 +271,25 @@ export function useTipPost() {
     };
   }, [getContract]);
 
-  // Initial fetch
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (window.ethereum) {
+        try {
+          const accounts = (await window.ethereum.request({
+            method: "eth_accounts",
+          })) as string[];
+          if (accounts && accounts.length > 0) {
+            setAccount(accounts[0]);
+            getContract(true).then(setContract).catch(console.error);
+          }
+        } catch (err) {
+          console.error("Failed to check existing accounts", err);
+        }
+      }
+    };
+    checkConnection();
+  }, [getContract]);
+
   useEffect(() => {
     fetchAllPosts();
   }, [fetchAllPosts]);
