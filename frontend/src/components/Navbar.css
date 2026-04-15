@@ -1,0 +1,154 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(74, 222, 128, 0.15);
+  padding: 0 1.5rem;
+}
+
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-icon {
+  font-size: 1.6rem;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #4ade80, #22c55e, #16a34a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.brand-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.earnings-display {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.earnings-icon {
+  font-size: 1rem;
+}
+
+.earnings-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.earnings-value {
+  color: #4ade80;
+  font-weight: 700;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+
+.connect-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(34, 197, 94, 0.1));
+  color: #4ade80;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.connect-btn:hover {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.25), rgba(34, 197, 94, 0.2));
+  border-color: rgba(74, 222, 128, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.2);
+}
+
+.connect-btn.connected {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wallet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.wallet-icon {
+  font-size: 1.1rem;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+@media (max-width: 640px) {
+  .navbar-inner {
+    height: 60px;
+  }
+
+  .earnings-display {
+    display: none;
+  }
+
+  .brand-text {
+    font-size: 1.2rem;
+  }
+
+  .connect-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+  }
+}

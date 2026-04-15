@@ -2,12 +2,14 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { network } from "hardhat";
+import "@nomicfoundation/hardhat-toolbox-viem";
 import { parseEther, type Address } from "viem";
 
 type PostTuple = [bigint, Address, string, string, bigint, bigint, bigint];
 
 describe("TipPost", async function () {
-  const { viem } = await network.connect();
+  const connection = await network.connect();
+  const { viem } = connection;
   const publicClient = await viem.getPublicClient();
   const [owner, user1, user2] = await viem.getWalletClients();
 
@@ -20,8 +22,7 @@ describe("TipPost", async function () {
     ]);
     await publicClient.waitForTransactionReceipt({ hash: txHash });
 
-
-    const post = await tipPost.read.posts([1n]) as PostTuple;
+    const post = (await tipPost.read.posts([1n])) as PostTuple;
     assert.equal(post[3], "Hello Blockchain!");
     assert.equal(post[1].toLowerCase(), owner.account.address.toLowerCase());
   });
